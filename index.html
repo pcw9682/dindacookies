@@ -1,9 +1,15 @@
+<!--- Bismillahirrahmanirrahim بسم الله الرحمن الرحيم, Sahaja aku berhizb selawat Fatih, untuk kemudahan urusan perjalanan sistem ini kerana Allah Taala
+
+وَإِلَٰهُكُمۡ إِلَٰهٞ وَٰحِدٞۖ لَّآ إِلَٰهَ إِلَّا هُوَ ٱلرَّحْمَٰنُ ٱلرَّحِيمُ. اللَّهُمَّ صَلَّ عَلَى سَيْدِنَا مُحَمَّدِ الْفَاتِحِ لِمَا أَعْلِقَ وَالْخَاتِمِ لِمَا سَبَقَ نَاصِرِ الْحَقِّ بِالْحَقِّ وَالْهَادِي إِلَى صِرَاطِكَ الْمُسْتَقِيمِ وَعَلَى آلِهِ حَق َّ قَدْرِهِ وَمِقْدَارِهِ الْعَظِيمِ        
+--->
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Dinda Cookies — Manis, Lembut, Menggoda</title>
+<link rel="icon" type="image/png" href="logo-512.png">
 <meta name="description" content="Dinda Cookies — kue kering rumahan: Nastar, Nuttela, Mawar Susu, Coklat Mente. Pesan lewat WhatsApp atau formulir. Homemade cookies from Indonesia.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -34,7 +40,7 @@ h1,h2,h3{font-family:'Fraunces',Georgia,serif;font-weight:900;line-height:1.08;l
 section{padding:72px 0;position:relative}
 header{position:sticky;top:0;z-index:60;background:rgba(255,247,236,.9);backdrop-filter:blur(12px);border-bottom:1px solid rgba(142,17,20,.15)}
 .nav{display:flex;align-items:center;gap:14px;padding:10px 22px;max-width:var(--max);margin:0 auto}
-.nav img{height:50px;border-radius:10px}
+.nav img{height:50px}
 .nav .brand{font-family:'Fraunces';font-weight:900;font-size:1.1rem;line-height:1}
 .nav .brand small{display:block;font-family:'Yellowtail';color:var(--karamel);font-size:1rem;font-weight:400}
 .nav nav{margin-left:auto;display:flex;gap:20px;align-items:center}
@@ -173,7 +179,7 @@ html[lang="en"] p[data-en],html[lang="en"] div[data-en]{display:block}
 
 <header>
   <div class="nav">
-    <img src="logo.jpeg" alt="Logo Dinda Cookies">
+    <img src="logo.png" alt="Logo Dinda Cookies">
     <div class="brand">DINDA<small>Cookies</small></div>
     <nav>
       <a href="#menu"><span data-id>Menu</span><span data-en>Menu</span></a>
@@ -189,7 +195,7 @@ html[lang="en"] p[data-en],html[lang="en"] div[data-en]{display:block}
 </header>
 
 <section class="hero wrap">
-  <img class="logo" src="logo.jpeg" alt="Dinda Cookies">
+  <img class="logo" src="logo.png" alt="Dinda Cookies">
   <h1><span data-id>Sekali gigit,<br>langsung ingat.</span><span data-en>One bite,<br>and you remember.</span></h1>
   <span class="skrip">Manis, Lembut, Menggoda</span>
   <p class="lead">
@@ -350,7 +356,7 @@ html[lang="en"] p[data-en],html[lang="en"] div[data-en]{display:block}
 <footer>
   <div class="wrap" style="display:grid;gap:22px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))">
     <div>
-      <img src="logo.jpeg" alt="Dinda Cookies" style="width:110px;border-radius:12px">
+      <img src="logo.png" alt="Dinda Cookies" style="width:110px;border-radius:12px">
       <p style="margin-top:12px;opacity:.85;font-size:.92rem"><span data-id>Kue kering rumahan, dipanggang di dapur kami sendiri.</span><span data-en>Homemade cookies, baked in our own kitchen.</span></p>
     </div>
     <div>
@@ -384,8 +390,8 @@ html[lang="en"] p[data-en],html[lang="en"] div[data-en]{display:block}
 /* ====== PENGATURAN — ubah di sini saja / EDIT HERE ONLY ====== */
 const TETAPAN = {
   telefon: "6285854306958",                  // WhatsApp, international format, no +
-  emel: "palalcahyowidodo@gmail.com",
-  scriptURL: "https://script.google.com/macros/s/AKfycbyeLvu2oH8oncWkMthnfIerb_gClzGlPm-ej6PRZwQnNRR0TTUqvbgsx8iSxMnRT3If/exec"  // Google Apps Script /exec URL
+  emel: "halo@dindacookies.com",
+  scriptURL: "https://script.google.com/macros/s/AKfycbx56bciEjVT0U_Nq--XboLPMs6DOZ9Dk7-1uXvP8BuHHb4ttDYVkyl8LwioKw4irXL_/exec"  // Google Apps Script /exec URL
 };
 
 const MENU = [
@@ -550,93 +556,84 @@ function ambilData(){
   return o;
 }
 
+/* ====== KIRIM VIA JSONP (tanpa masalah CORS, dapat balasan asli) ====== */
+function kirimJSONP(muatan){
+  return new Promise((resolve, reject)=>{
+    const nama = 'dc_' + Date.now() + Math.floor(Math.random()*1000);
+    const sk = document.createElement('script');
+    const bersih = ()=>{ delete window[nama]; sk.remove(); clearTimeout(jam); };
+    const jam = setTimeout(()=>{ bersih(); reject(new Error('timeout')); }, 15000);
+    window[nama] = r => { bersih(); resolve(r); };
+    const u = TETAPAN.scriptURL
+      + (TETAPAN.scriptURL.includes('?') ? '&' : '?')
+      + 'aksi=simpan&callback=' + nama
+      + '&data=' + encodeURIComponent(JSON.stringify(muatan));
+    sk.src = u;
+    sk.onerror = ()=>{ bersih(); reject(new Error('gagal')); };
+    document.body.appendChild(sk);
+  });
+}
+
 document.getElementById('borangPesan').addEventListener('submit', async e=>{
   e.preventDefault();
-  const btn=e.submitter, asal=btn.innerHTML;
-  btn.textContent = bahasa==='id'?'Mengirim…':'Sending…'; btn.disabled=true;
-  const d=ambilData(); d.jenis='pesanan'; d.waktu=new Date().toISOString();
-  const wa = `https://wa.me/${TETAPAN.telefon}?text=${mesej(d)}`;
+  const btn = e.submitter, asal = btn.innerHTML;
+  btn.textContent = bahasa==='id' ? 'Mengirim…' : 'Sending…';
+  btn.disabled = true;
+
+  const d = ambilData();
+  d.jenis = 'pesanan';
+  d.website = document.getElementById('website').value;   // honeypot
+
   try{
-    await fetch(TETAPAN.scriptURL,{method:'POST',mode:'no-cors',
-      headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(d)});
-    toast(bahasa==='id'?'Pesanan diterima. Kami hubungi sebentar lagi.':'Order received. We will contact you shortly.');
+    const r = await kirimJSONP(d);
+    if(r && r.ok){
+      toast(bahasa==='id'
+        ? 'Pesanan tersimpan. Kami hubungi sebentar lagi.'
+        : 'Order saved. We will contact you shortly.');
+      e.target.reset(); talam = []; lukisTalam(); setem(0);
+      document.getElementById('gpsHasil').className = 'hasil';
+      document.getElementById('koordinat').value = '';
+      document.getElementById('peta').value = '';
+    }else{
+      gagalKirim(d, (r && r.error) || '');
+    }
   }catch(err){
-    toast(bahasa==='id'?'Koneksi gagal — kami buka WhatsApp untuk Anda.':'Connection failed — opening WhatsApp instead.');
+    gagalKirim(d, '');
   }finally{
-    window.open(wa,'_blank');
-    e.target.reset(); talam=[]; lukisTalam(); setem(0);
-    btn.innerHTML=asal; btn.disabled=false;
+    btn.innerHTML = asal; btn.disabled = false;
   }
 });
 
-document.getElementById('waBorang').onclick=()=>{
-  const d=ambilData();
-  if(!d.nama||!d.pesanan){ toast(bahasa==='id'?'Isi nama dan pesanan dulu.':'Fill in your name and order first.'); return; }
-  window.open(`https://wa.me/${TETAPAN.telefon}?text=${mesej(d)}`,'_blank');
+// hanya dipanggil kalau penyimpanan benar-benar gagal
+function gagalKirim(d, sebab){
+  const L = bahasa === 'id';
+  const pesan = L
+    ? 'Pesanan gagal tersimpan' + (sebab ? ' (' + sebab + ')' : '') + '. Kirim lewat WhatsApp saja?'
+    : 'The order could not be saved' + (sebab ? ' (' + sebab + ')' : '') + '. Send it on WhatsApp instead?';
+  if(confirm(pesan)) window.open(`https://wa.me/${TETAPAN.telefon}?text=${mesej(d)}`, '_blank');
+}
+
+document.getElementById('waBorang').onclick = ()=>{
+  const d = ambilData();
+  if(!d.nama || !d.pesanan){
+    toast(bahasa==='id' ? 'Isi nama dan pesanan dulu.' : 'Fill in your name and order first.');
+    return;
+  }
+  window.open(`https://wa.me/${TETAPAN.telefon}?text=${mesej(d)}`, '_blank');
 };
 
 document.getElementById('borangEmel').addEventListener('submit', async e=>{
   e.preventDefault();
-  const emel=document.getElementById('emelLanggan').value;
+  const emel = document.getElementById('emelLanggan').value;
   try{
-    await fetch(TETAPAN.scriptURL,{method:'POST',mode:'no-cors',
-      headers:{'Content-Type':'text/plain;charset=utf-8'},
-      body:JSON.stringify({jenis:'langganan',emel:emel,bahasa:bahasa,waktu:new Date().toISOString()})});
-  }catch(err){}
-  toast(bahasa==='id'?'Selesai. Kode diskon pertama dikirim ke email Anda.':'Done. Your first discount code is on its way.');
-  e.target.reset();
-});
-
-
-/* ====== LOKASI GPS ====== */
-document.getElementById('btnGPS').addEventListener('click', function(){
-  const btn = this, hasil = document.getElementById('gpsHasil');
-  const L = () => bahasa === 'id';
-  if(!navigator.geolocation){
-    hasil.className='hasil tampil';
-    hasil.textContent = L()?'Peramban Anda tidak mendukung GPS. Tulis alamat manual saja.'
-                           :'Your browser does not support GPS. Please type the address instead.';
-    return;
+    const r = await kirimJSONP({jenis:'langganan', emel:emel, bahasa:bahasa});
+    toast(r && r.ok
+      ? (bahasa==='id' ? 'Selesai. Kode diskon pertama menyusul ke email Anda.' : 'Done. Your first discount code is on its way.')
+      : (bahasa==='id' ? 'Gagal mendaftar. Coba lagi sebentar.' : 'Could not subscribe. Please try again.'));
+    if(r && r.ok) e.target.reset();
+  }catch(err){
+    toast(bahasa==='id' ? 'Gagal mendaftar. Coba lagi sebentar.' : 'Could not subscribe. Please try again.');
   }
-  const asal = btn.innerHTML;
-  btn.textContent = L()?'Mencari lokasi…':'Finding location…';
-  btn.disabled = true;
-
-  navigator.geolocation.getCurrentPosition(async pos=>{
-    const lat = pos.coords.latitude.toFixed(6), lon = pos.coords.longitude.toFixed(6);
-    const akurasi = Math.round(pos.coords.accuracy);
-    const peta = `https://maps.google.com/?q=${lat},${lon}`;
-    document.getElementById('koordinat').value = `${lat}, ${lon}`;
-    document.getElementById('peta').value = peta;
-
-    let alamatOtomatis = '';
-    try{
-      const r = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}&accept-language=${bahasa}`);
-      const j = await r.json();
-      alamatOtomatis = j.display_name || '';
-    }catch(err){}
-
-    const ta = document.getElementById('alamat');
-    if(alamatOtomatis && !ta.value.trim()) ta.value = alamatOtomatis;
-
-    hasil.className = 'hasil tampil';
-    hasil.innerHTML = (L()
-      ? `Titik tersimpan: <b>${lat}, ${lon}</b> (perkiraan ±${akurasi} m)<br><a href="${peta}" target="_blank" rel="noopener">Buka di Google Maps</a>`
-      : `Pin saved: <b>${lat}, ${lon}</b> (approx. ±${akurasi} m)<br><a href="${peta}" target="_blank" rel="noopener">Open in Google Maps</a>`)
-      + (alamatOtomatis ? `<div class="ket">${L()?'Alamat terisi otomatis — mohon lengkapi nomor rumah, RT/RW, dan patokan.':'Address filled automatically — please add house number and a landmark.'}</div>` : '');
-
-    toast(L()?'Titik lokasi tersimpan':'Location pin saved');
-    btn.innerHTML = asal; btn.disabled = false;
-
-  }, err=>{
-    hasil.className='hasil tampil';
-    hasil.textContent = err.code === 1
-      ? (L()?'Izin lokasi ditolak. Aktifkan izin lokasi di peramban, atau tulis alamat manual.'
-           :'Location permission denied. Enable it in your browser, or type the address instead.')
-      : (L()?'Lokasi tidak terbaca. Coba di luar ruangan, atau tulis alamat manual.'
-           :'Could not read your location. Try outdoors, or type the address instead.');
-    btn.innerHTML = asal; btn.disabled = false;
-  }, {enableHighAccuracy:true, timeout:12000, maximumAge:0});
 });
 
 function ovenText(){
