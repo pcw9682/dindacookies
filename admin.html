@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin — Dinda Cookies</title>
+<link rel="icon" type="image/png" href="logo-512.png">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,900&family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--merah:#8E1114;--emas:#E3B23C;--krim:#FFF7EC;--coklat:#3A1B0C;--hijau:#4C7A34;--biru:#2C6E9B;--abu:#EFE6DA}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--krim);color:var(--coklat);line-height:1.55}
+header{background:var(--merah);color:#fff;padding:14px 18px;position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+header img{height:38px}
+header h1{font-family:'Fraunces';font-size:1.1rem;font-weight:900}
+header .kanan{margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.wrap{max-width:1200px;margin:0 auto;padding:18px}
+.btn{border:none;cursor:pointer;font-family:inherit;font-weight:800;font-size:.85rem;padding:9px 16px;border-radius:999px;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.btn-emas{background:var(--emas);color:var(--coklat)}
+.btn-putih{background:#fff;color:var(--merah)}
+.btn-wa{background:#25D366;color:#08301a}
+.btn-kecil{padding:6px 12px;font-size:.78rem}
+.kartu{background:#fff;border:1px solid rgba(142,17,20,.15);border-radius:16px;padding:16px;margin-bottom:14px}
+.ringkas{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.stat{background:#fff;border:1px solid rgba(142,17,20,.15);border-radius:16px;padding:16px}
+.stat b{font-family:'Fraunces';font-size:1.7rem;display:block;line-height:1.1;color:var(--merah)}
+.stat span{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;opacity:.6}
+.alat{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+input,select{padding:10px 13px;border:1.5px solid rgba(58,27,12,.2);border-radius:10px;font-family:inherit;font-size:.9rem;background:#fff}
+input:focus,select:focus{outline:none;border-color:var(--emas)}
+#cari{flex:1;min-width:180px}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:16px;overflow:hidden;font-size:.88rem}
+th{background:var(--abu);text-align:left;padding:11px 12px;font-size:.74rem;text-transform:uppercase;letter-spacing:.07em}
+td{padding:11px 12px;border-top:1px solid var(--abu);vertical-align:top}
+tr:hover td{background:#FFFBF4}
+.lencana{display:inline-block;padding:3px 10px;border-radius:999px;font-size:.72rem;font-weight:800}
+.baru{background:#FDE8C8;color:#8a5a00}
+.proses{background:#D6E9F5;color:var(--biru)}
+.kirim{background:#DCEFD2;color:var(--hijau)}
+.batal{background:#F4D6D6;color:var(--merah)}
+.kosong{text-align:center;padding:48px 20px;opacity:.7}
+.kosong b{display:block;font-family:'Fraunces';font-size:1.2rem;margin-bottom:6px}
+#kad{display:none}
+@media(max-width:780px){
+  table{display:none}
+  #kad{display:block}
+  .wrap{padding:14px}
+  header h1{font-size:.98rem}
+}
+.pesanan{background:#fff;border:1px solid rgba(142,17,20,.15);border-radius:16px;padding:15px;margin-bottom:12px}
+.pesanan .atas{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.pesanan h3{font-family:'Fraunces';font-size:1.05rem}
+.pesanan dl{margin-top:10px;font-size:.86rem}
+.pesanan dt{font-weight:800;opacity:.6;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;margin-top:8px}
+.pesanan .aksi{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.total{font-family:'Fraunces';font-weight:900;color:var(--merah)}
+.nota{font-size:.8rem;opacity:.65;margin-top:6px}
+.pasang{background:#fff;border:1px dashed var(--merah);border-radius:16px;padding:18px;margin-bottom:16px;font-size:.88rem}
+.pasang code{background:var(--abu);padding:2px 6px;border-radius:6px;font-size:.82rem;word-break:break-all}
+</style>
+</head>
+<body>
+
+<header>
+  <img src="logo.png" alt="Dinda Cookies">
+  <h1>Panel Admin — Pesanan</h1>
+  <div class="kanan">
+    <button class="btn btn-emas" onclick="muat()">↻ Muat ulang</button>
+    <a class="btn btn-putih" href="index.html">Lihat situs</a>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="pasang" id="pasang">
+    <b>Sekali saja.</b> Isi URL Apps Script dan kunci admin Anda.
+    <div class="alat" style="margin-top:10px">
+      <input id="urlInput" placeholder="https://script.google.com/macros/s/..../exec" style="flex:1;min-width:220px">
+      <input id="kunciInput" type="password" placeholder="Kunci admin" style="min-width:170px">
+      <button class="btn btn-emas" onclick="simpanURL()">Simpan &amp; sambung</button>
+    </div>
+    <div class="nota">
+      URL harus berakhiran <code>/exec</code> (bukan <code>/dev</code>), dan deployment harus
+      <b>Execute as: Me</b> + <b>Who has access: Anyone</b>. Kunci harus sama persis dengan
+      <code>KUNCI_ADMIN</code> di Code.gs. Data tersimpan di browser ini saja.
+    </div>
+    <div id="galat" style="display:none;margin-top:10px;color:var(--merah);font-weight:700;font-size:.85rem"></div>
+  </div>
+
+  <div class="ringkas">
+    <div class="stat"><b id="sTotal">0</b><span>Total pesanan</span></div>
+    <div class="stat"><b id="sBaru">0</b><span>Belum diproses</span></div>
+    <div class="stat"><b id="sHari">0</b><span>Masuk hari ini</span></div>
+    <div class="stat"><b id="sOmzet">IDR 0</b><span>Nilai pesanan</span></div>
+  </div>
+
+  <div class="alat">
+    <input id="cari" placeholder="Cari nama, nomor WA, atau produk…" oninput="lukis()">
+    <select id="filterStatus" onchange="lukis()">
+      <option value="">Semua status</option>
+      <option value="Baru">Baru</option>
+      <option value="Diproses">Diproses</option>
+      <option value="Dikirim">Dikirim</option>
+      <option value="Batal">Batal</option>
+    </select>
+    <select id="filterWaktu" onchange="lukis()">
+      <option value="">Semua waktu</option>
+      <option value="1">Hari ini</option>
+      <option value="7">7 hari terakhir</option>
+      <option value="30">30 hari terakhir</option>
+    </select>
+    <button class="btn btn-putih" onclick="unduhCSV()">⬇ Unduh CSV</button>
+  </div>
+
+  <div id="isi"></div>
+</div>
+
+<script>
+let DATA = [];
+const K_URL = 'dinda_admin_url', K_KEY = 'dinda_admin_kunci';
+
+function urlAdmin(){ return sessionStorage.getItem(K_URL) || ''; }
+function kunciAdmin(){ return sessionStorage.getItem(K_KEY) || ''; }
+
+function simpanURL(){
+  const u = document.getElementById('urlInput').value.trim();
+  const k = document.getElementById('kunciInput').value.trim();
+  if(!u || !k){ galat('URL dan kunci admin dua-duanya wajib diisi.'); return; }
+  if(!/\/exec(\?|$)/.test(u)){ galat('URL harus berakhiran /exec — bukan /dev atau URL editor.'); return; }
+  sessionStorage.setItem(K_URL, u);
+  sessionStorage.setItem(K_KEY, k);
+  galat('');
+  muat();
+}
+
+function galat(pesan){
+  const g = document.getElementById('galat');
+  g.textContent = pesan;
+  g.style.display = pesan ? 'block' : 'none';
+}
+
+/* JSONP — Apps Script mengalihkan permintaan ke googleusercontent,
+   dan pengalihan itu diblokir CORS. Tag <script> tidak terkena CORS. */
+function panggil(params){
+  return new Promise((resolve, reject)=>{
+    const nama = 'dc_' + Date.now() + Math.floor(Math.random()*1000);
+    const sk = document.createElement('script');
+    const bersih = ()=>{ delete window[nama]; sk.remove(); clearTimeout(jam); };
+    const jam = setTimeout(()=>{ bersih(); reject(new Error('Tidak ada balasan (timeout).')); }, 15000);
+    window[nama] = r => { bersih(); resolve(r); };
+    const q = new URLSearchParams(Object.assign({kunci: kunciAdmin(), callback: nama}, params));
+    const u = urlAdmin();
+    sk.src = u + (u.includes('?') ? '&' : '?') + q.toString();
+    sk.onerror = ()=>{ bersih(); reject(new Error('URL tidak bisa dihubungi. Cek alamat dan pengaturan deployment.')); };
+    document.body.appendChild(sk);
+  });
+}
+
+async function muat(){
+  if(!urlAdmin() || !kunciAdmin()){
+    document.getElementById('pasang').style.display = 'block';
+    document.getElementById('isi').innerHTML = kosong('Belum tersambung','Isi URL dan kunci admin di kotak atas.');
+    return;
+  }
+  document.getElementById('isi').innerHTML = kosong('Memuat…','Mengambil data dari Google Sheet.');
+  try{
+    const j = await panggil({aksi:'senarai'});
+    if(!j || j.ok === false){
+      sessionStorage.removeItem(K_KEY);
+      document.getElementById('pasang').style.display = 'block';
+      galat((j && j.error) === 'Akses ditolak'
+        ? 'Kunci admin salah. Cocokkan dengan KUNCI_ADMIN di Code.gs.'
+        : 'Server menolak permintaan. Pastikan Code.gs versi terbaru sudah di-deploy ulang.');
+      document.getElementById('isi').innerHTML = kosong('Tidak bisa masuk','Perbaiki isian di kotak atas lalu sambungkan lagi.');
+      return;
+    }
+    document.getElementById('pasang').style.display = 'none';
+    galat('');
+    DATA = (j.data || []).filter(x => !x.jenis || x.jenis === 'pesanan');
+    lukis();
+  }catch(e){
+    document.getElementById('pasang').style.display = 'block';
+    galat(e.message + ' Ingat: setiap kali Code.gs diubah, wajib Deploy > Manage deployments > Edit > New version.');
+    document.getElementById('isi').innerHTML = kosong('Gagal mengambil data','Periksa pesan merah di kotak atas.');
+  }
+}
+
+async function ubahStatus(baris, nilai){
+  try{
+    const j = await panggil({aksi:'status', baris:baris, nilai:nilai});
+    if(j && j.ok){ const d = DATA.find(x=>x.baris===baris); if(d) d.status = nilai; lukis(); }
+    else alert('Status gagal diubah.');
+  }catch(e){ alert(e.message); }
+}
+
+/* ---------- pembantu tampilan ---------- */
+function rupiah(n){ return 'IDR ' + (Number(n)||0).toLocaleString('id-ID'); }
+
+function tgl(iso){
+  if(!iso) return '-';
+  const d = new Date(iso);
+  return isNaN(d) ? iso : d.toLocaleString('id-ID',
+    {day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+}
+
+function waLink(no, nama){
+  const n = String(no||'').replace(/[^0-9]/g,'').replace(/^0/,'62');
+  return `https://wa.me/${n}?text=` +
+    encodeURIComponent('Halo ' + (nama||'') + ', pesanan Dinda Cookies Anda sudah kami terima.');
+}
+
+function kosong(judul, teks){ return `<div class="kosong"><b>${judul}</b>${teks}</div>`; }
+
+function saring(){
+  const q = document.getElementById('cari').value.toLowerCase();
+  const st = document.getElementById('filterStatus').value;
+  const hr = document.getElementById('filterWaktu').value;
+  const batas = hr ? Date.now() - hr*864e5 : 0;
+  return DATA.filter(d=>{
+    const teks = [d.nama,d.fon,d.emel,d.pesanan,d.alamat].join(' ').toLowerCase();
+    if(q && !teks.includes(q)) return false;
+    if(st && (d.status||'Baru') !== st) return false;
+    if(batas && new Date(d.waktu).getTime() < batas) return false;
+    return true;
+  });
+}
+
+function pilihStatus(d){
+  const st = d.status || 'Baru';
+  return `<select onchange="ubahStatus(${d.baris}, this.value)" style="padding:5px 8px;font-size:.78rem;font-weight:800">` +
+    ['Baru','Diproses','Dikirim','Batal'].map(v=>`<option ${v===st?'selected':''}>${v}</option>`).join('') +
+    `</select>`;
+}
+
+function lencana(s){
+  const st = s || 'Baru';
+  const k = {Baru:'baru',Diproses:'proses',Dikirim:'kirim',Batal:'batal'}[st] || 'baru';
+  return `<span class="lencana ${k}">${st}</span>`;
+}
+
+function lukis(){
+  const rows = saring();
+  const hariIni = DATA.filter(d => new Date(d.waktu).toDateString() === new Date().toDateString()).length;
+  document.getElementById('sTotal').textContent = DATA.length;
+  document.getElementById('sBaru').textContent  = DATA.filter(d=>(d.status||'Baru')==='Baru').length;
+  document.getElementById('sHari').textContent  = hariIni;
+  document.getElementById('sOmzet').textContent = rupiah(rows.reduce((a,d)=>a+(Number(d.total_idr)||0),0));
+
+  if(!rows.length){ document.getElementById('isi').innerHTML = kosong('Tidak ada pesanan','Coba ubah kata kunci atau filter di atas.'); return; }
+
+  const tabel = `<table><thead><tr>
+    <th>Waktu</th><th>Pelanggan</th><th>Pesanan</th><th>Kirim</th><th>Total</th><th>Status</th><th></th>
+  </tr></thead><tbody>${rows.map((d,i)=>`
+    <tr>
+      <td>${tgl(d.waktu)}<div class="nota">${d.tarikh||''}</div></td>
+      <td><b>${d.nama||'-'}</b><div class="nota">${d.fon||''}<br>${d.emel||''}</div></td>
+      <td>${d.pesanan||'-'}${d.kartu?`<div class="nota">🎁 ${d.kartu}</div>`:''}${d.rujukan?`<div class="nota">Ref: ${d.rujukan}</div>`:''}</td>
+      <td>${d.kirim||'-'}<div class="nota">${d.alamat||''}</div></td>
+      <td class="total">${rupiah(d.total_idr)}<div class="nota">USD ${d.total_usd||'0.00'}</div></td>
+      <td>${pilihStatus(d)}</td>
+      <td><a class="btn btn-wa btn-kecil" target="_blank" rel="noopener" href="${waLink(d.fon,d.nama)}">Balas</a></td>
+    </tr>`).join('')}</tbody></table>`;
+
+  const kad = `<div id="kad">${rows.map(d=>`
+    <div class="pesanan">
+      <div class="atas">
+        <div><h3>${d.nama||'-'}</h3><div class="nota">${tgl(d.waktu)}</div></div>
+        ${pilihStatus(d)}
+      </div>
+      <dl>
+        <dt>Pesanan</dt><dd>${d.pesanan||'-'}</dd>
+        <dt>Total</dt><dd class="total">${rupiah(d.total_idr)} · USD ${d.total_usd||'0.00'}</dd>
+        <dt>Pengiriman</dt><dd>${d.kirim||'-'} — ${d.alamat||''}</dd>
+        <dt>Tanggal dibutuhkan</dt><dd>${d.tarikh||'-'}</dd>
+        ${d.kartu?`<dt>Kartu ucapan</dt><dd>${d.kartu}</dd>`:''}
+        ${d.rujukan?`<dt>Kode referral</dt><dd>${d.rujukan}</dd>`:''}
+      </dl>
+      <div class="aksi">
+        <a class="btn btn-wa btn-kecil" target="_blank" rel="noopener" href="${waLink(d.fon,d.nama)}">💬 WhatsApp</a>
+        <a class="btn btn-putih btn-kecil" href="tel:${d.fon||''}">📞 Telepon</a>
+        <a class="btn btn-putih btn-kecil" href="mailto:${d.emel||''}">✉ Email</a>
+      </div>
+    </div>`).join('')}</div>`;
+
+  document.getElementById('isi').innerHTML = tabel + kad;
+}
+
+function unduhCSV(){
+  const rows = saring();
+  if(!rows.length){ alert('Tidak ada data untuk diunduh.'); return; }
+  const kolom = ['waktu','nama','fon','emel','alamat','tarikh','kirim','pesanan','total_idr','total_usd','rujukan','kartu','status'];
+  const esc = v => `"${String(v??'').replace(/"/g,'""')}"`;
+  const csv = [kolom.join(','), ...rows.map(r=>kolom.map(k=>esc(r[k])).join(','))].join('\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}));
+  a.download = `pesanan-dinda-${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+}
+
+muat();
+</script>
+</body>
+</html>
