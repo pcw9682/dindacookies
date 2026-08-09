@@ -390,8 +390,8 @@ html[lang="en"] p[data-en],html[lang="en"] div[data-en]{display:block}
 /* ====== PENGATURAN — ubah di sini saja / EDIT HERE ONLY ====== */
 const TETAPAN = {
   telefon: "6285854306958",                  // WhatsApp, international format, no +
-  emel: "halo@dindacookies.com",
-  scriptURL: "https://script.google.com/macros/s/AKfycbx56bciEjVT0U_Nq--XboLPMs6DOZ9Dk7-1uXvP8BuHHb4ttDYVkyl8LwioKw4irXL_/exec"  // Google Apps Script /exec URL
+  emel: "palalcahyowidodo@gmail.com.com",
+  scriptURL: "https://script.google.com/macros/s/AKfycbzuJei5lv8XFdX6stozWBvFM6NvqDZxCFDjk8Yw6w62VK9Nj1qlPQu-zlih4k4vTKj5/exec"  // Google Apps Script /exec URL
 };
 
 const MENU = [
@@ -555,6 +555,69 @@ function ambilData(){
   o.bahasa = bahasa;
   return o;
 }
+
+/* ====== LOKASI GPS ====== */
+document.getElementById('btnGPS').addEventListener('click', function(){
+  const btn = this, hasil = document.getElementById('gpsHasil');
+  const L = () => bahasa === 'id';
+
+  if(!navigator.geolocation){
+    hasil.className = 'hasil tampil';
+    hasil.textContent = L() ? 'Peramban Anda tidak mendukung GPS. Tulis alamat manual saja.'
+                            : 'Your browser does not support GPS. Please type the address instead.';
+    return;
+  }
+  if(location.protocol !== 'https:' && location.hostname !== 'localhost'){
+    hasil.className = 'hasil tampil';
+    hasil.textContent = L() ? 'GPS hanya jalan di alamat https. Buka situs lewat https, bukan file lokal.'
+                            : 'GPS only works over https. Open the site via https, not as a local file.';
+    return;
+  }
+
+  const asal = btn.innerHTML;
+  btn.textContent = L() ? 'Mencari lokasi…' : 'Finding location…';
+  btn.disabled = true;
+
+  navigator.geolocation.getCurrentPosition(async pos => {
+    const lat = pos.coords.latitude.toFixed(6);
+    const lon = pos.coords.longitude.toFixed(6);
+    const akurasi = Math.round(pos.coords.accuracy);
+    const peta = `https://maps.google.com/?q=${lat},${lon}`;
+
+    document.getElementById('koordinat').value = `${lat}, ${lon}`;
+    document.getElementById('peta').value = peta;
+
+    let alamatOtomatis = '';
+    try{
+      const r = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}&accept-language=${bahasa}`);
+      const j = await r.json();
+      alamatOtomatis = j.display_name || '';
+    }catch(err){}
+
+    const ta = document.getElementById('alamat');
+    if(alamatOtomatis && !ta.value.trim()) ta.value = alamatOtomatis;
+
+    hasil.className = 'hasil tampil';
+    hasil.innerHTML = (L()
+      ? `Titik tersimpan: <b>${lat}, ${lon}</b> (perkiraan ±${akurasi} m)<br><a href="${peta}" target="_blank" rel="noopener">Buka di Google Maps</a>`
+      : `Pin saved: <b>${lat}, ${lon}</b> (approx. ±${akurasi} m)<br><a href="${peta}" target="_blank" rel="noopener">Open in Google Maps</a>`)
+      + (alamatOtomatis
+        ? `<div class="ket">${L() ? 'Alamat terisi otomatis — mohon lengkapi nomor rumah, RT/RW, dan patokan.' : 'Address filled automatically — please add house number and a landmark.'}</div>`
+        : '');
+
+    toast(L() ? 'Titik lokasi tersimpan' : 'Location pin saved');
+    btn.innerHTML = asal; btn.disabled = false;
+
+  }, err => {
+    hasil.className = 'hasil tampil';
+    hasil.textContent = err.code === 1
+      ? (L() ? 'Izin lokasi ditolak. Aktifkan izin lokasi di peramban, lalu coba lagi.'
+             : 'Location permission denied. Enable it in your browser and try again.')
+      : (L() ? 'Lokasi tidak terbaca. Coba di luar ruangan, atau tulis alamat manual.'
+             : 'Could not read your location. Try outdoors, or type the address instead.');
+    btn.innerHTML = asal; btn.disabled = false;
+  }, {enableHighAccuracy:true, timeout:12000, maximumAge:0});
+});
 
 /* ====== KIRIM VIA JSONP (tanpa masalah CORS, dapat balasan asli) ====== */
 function kirimJSONP(muatan){
