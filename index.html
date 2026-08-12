@@ -2,7 +2,6 @@
 
 وَإِلَٰهُكُمۡ إِلَٰهٞ وَٰحِدٞۖ لَّآ إِلَٰهَ إِلَّا هُوَ ٱلرَّحْمَٰنُ ٱلرَّحِيمُ. اللَّهُمَّ صَلَّ عَلَى سَيْدِنَا مُحَمَّدِ الْفَاتِحِ لِمَا أَعْلِقَ وَالْخَاتِمِ لِمَا سَبَقَ نَاصِرِ الْحَقِّ بِالْحَقِّ وَالْهَادِي إِلَى صِرَاطِكَ الْمُسْتَقِيمِ وَعَلَى آلِهِ حَق َّ قَدْرِهِ وَمِقْدَارِهِ الْعَظِيمِ        
 --->
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -137,6 +136,42 @@ html[lang="en"] p[data-en],html[lang="en"] div[data-en]{display:block}
 .gps .ket{font-size:.8rem;opacity:.7;margin-top:8px}
 .honey{position:absolute;left:-9999px;opacity:0;height:0;width:0}
 @media(max-width:640px){ .gps .btn{flex:1 1 100%;justify-content:center} }
+
+/* ---- panel rincian keranjang ---- */
+#talam #togel{background:transparent;border:none;color:inherit;font-family:'Fraunces',serif;
+  font-size:1.05rem;font-weight:900;cursor:pointer;display:flex;align-items:center;gap:8px;padding:0}
+#panah{font-size:.7rem;transition:transform .25s;opacity:.8}
+#talam.buka-rincian #panah{transform:rotate(180deg)}
+#talamHarga{opacity:.85;font-size:.88rem}
+#rincian{max-height:0;overflow:hidden;transition:max-height .3s ease;
+  max-width:var(--max);margin:0 auto;padding:0 4px}
+#talam.buka-rincian #rincian{max-height:46vh;overflow-y:auto;padding:10px 4px 4px}
+.item{display:flex;align-items:center;gap:12px;padding:10px 6px;border-bottom:1px solid rgba(255,231,204,.18)}
+.item img{width:46px;height:46px;object-fit:cover;border-radius:10px;flex-shrink:0}
+.item .nm{flex:1;min-width:0}
+.item .nm b{display:block;font-family:'Plus Jakarta Sans';font-size:.9rem;font-weight:800;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item .nm span{font-size:.76rem;opacity:.7}
+.qty{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.qty button{width:30px;height:30px;border-radius:50%;border:1.5px solid rgba(255,231,204,.5);
+  background:transparent;color:var(--lembut);font-size:1rem;font-weight:800;cursor:pointer;line-height:1}
+.qty button:hover{background:var(--lembut);color:var(--coklat)}
+.qty b{min-width:20px;text-align:center;font-family:'Plus Jakarta Sans';font-size:.92rem}
+.item .sub{width:104px;text-align:right;font-size:.82rem;font-weight:800;flex-shrink:0}
+.buang{width:30px;height:30px;border-radius:50%;border:none;background:rgba(184,40,46,.35);
+  color:#fff;cursor:pointer;font-size:.85rem;flex-shrink:0}
+.buang:hover{background:#B8282E}
+.kosongkan{background:none;border:none;color:var(--lembut);opacity:.7;text-decoration:underline;
+  cursor:pointer;font-family:inherit;font-size:.82rem;padding:10px 6px}
+.kad.dipilih{border-color:var(--merah);box-shadow:0 0 0 2px var(--merah),0 10px 26px rgba(58,27,12,.14)}
+.jumkad{position:absolute;top:12px;right:12px;z-index:3;background:var(--merah);color:#fff;
+  width:30px;height:30px;border-radius:50%;display:none;place-items:center;font-weight:800;font-size:.85rem}
+.kad.dipilih .jumkad{display:grid}
+@media(max-width:640px){
+  .item .sub{width:auto;font-size:.78rem}
+  .item img{width:38px;height:38px}
+  #talam.buka-rincian #rincian{max-height:52vh}
+}
 /* ====== MOBILE ====== */
 @media(max-width:640px){
   section{padding:48px 0}
@@ -305,7 +340,9 @@ html[lang="en"] p[data-en],html[lang="en"] div[data-en]{display:block}
         </select></div>
     </div>
     <label for="pesanan"><span data-id>Pesanan Anda</span><span data-en>Your order</span></label>
-    <textarea id="pesanan" name="pesanan" rows="3" required></textarea>
+    <textarea id="pesanan" name="pesanan" rows="3" required readonly
+      style="background:var(--lembut);cursor:not-allowed"></textarea>
+    <p class="nota" id="notaPesanan"></p>
     <div class="dua">
       <div><label for="rujukan"><span data-id>Kode referral (opsional)</span><span data-en>Referral code (optional)</span></label><input id="rujukan" name="rujukan" placeholder="DINDA-AIDA"></div>
       <div><label for="kartu"><span data-id>Kartu ucapan (opsional)</span><span data-en>Gift note (optional)</span></label><input id="kartu" name="kartu"></div>
@@ -363,7 +400,7 @@ html[lang="en"] p[data-en],html[lang="en"] div[data-en]{display:block}
       <h3 style="font-size:1rem;margin-bottom:8px"><span data-id>Hubungi</span><span data-en>Contact</span></h3>
       <p style="font-size:.93rem"><a href="tel:+6285854306958">+62 858-5430-6958</a><br>
       <a id="waFooter" target="_blank" rel="noopener">WhatsApp</a><br>
-      <a href="mailto:halo@dindacookies.com">halo@dindacookies.com</a></p>
+      <a href="mailto:palalcahyowidodo@gmail.com">palalcahyowidodo@gmail.com</a></p>
     </div>
     <div>
       <h3 style="font-size:1rem;margin-bottom:8px"><span data-id>Jam pesanan</span><span data-en>Order hours</span></h3>
@@ -378,11 +415,16 @@ html[lang="en"] p[data-en],html[lang="en"] div[data-en]{display:block}
   <a class="tel" href="tel:+6285854306958" aria-label="Telepon Dinda Cookies">📞</a>
 </div>
 
-<div id="talam"><div class="in">
-  <b id="talamTeks"></b>
-  <span id="talamHarga" style="opacity:.85;font-size:.88rem"></span>
-  <a href="#pesan" class="btn btn-wa"><span data-id>Lanjut pesan</span><span data-en>Continue order</span></a>
-</div></div>
+<div id="talam">
+  <div id="rincian"></div>
+  <div class="in">
+    <button id="togel" type="button" aria-expanded="false">
+      <span id="talamTeks"></span> <span id="panah">▲</span>
+    </button>
+    <span id="talamHarga"></span>
+    <a href="#pesan" class="btn btn-wa" id="lanjut"><span data-id>Lanjut pesan</span><span data-en>Continue order</span></a>
+  </div>
+</div>
 
 <div class="toast" id="toast"></div>
 
@@ -390,7 +432,7 @@ html[lang="en"] p[data-en],html[lang="en"] div[data-en]{display:block}
 /* ====== PENGATURAN — ubah di sini saja / EDIT HERE ONLY ====== */
 const TETAPAN = {
   telefon: "6285854306958",                  // WhatsApp, international format, no +
-  emel: "palalcahyowidodo@gmail.com.com",
+  emel: "palalcahyowidodo@gmail.com",
   scriptURL: "https://script.google.com/macros/s/AKfycbzuJei5lv8XFdX6stozWBvFM6NvqDZxCFDjk8Yw6w62VK9Nj1qlPQu-zlih4k4vTKj5/exec"  // Google Apps Script /exec URL
 };
 
@@ -459,8 +501,10 @@ function bangunMenu(){
     const tag  = bahasa==='id'?m.tag_id:m.tag_en;
     const el=document.createElement('article');
     el.className='kad'; el.tabIndex=0; el.setAttribute('role','button');
+    el.dataset.kunci = kunci(m);
     el.setAttribute('aria-label', (bahasa==='id'?'Tambah ':'Add ')+nama+' '+m.uk);
     el.innerHTML = `${tag?`<div class="tag">${tag}</div>`:''}
+      <div class="jumkad"></div>
       <div class="foto"><img src="${m.img}" alt="${nama} ${m.uk}" loading="lazy"></div>
       <div class="isi">
         <h3>${nama}</h3>
@@ -476,33 +520,113 @@ function bangunMenu(){
 }
 
 /* ====== KERANJANG ====== */
-let talam=[];
-function kunci(m){ return m.id+' '+m.uk; }
+let talam = [];
+function kunci(m){ return m.id + '|' + m.uk; }
+function cari(k){ return talam.find(t => kunci(t) === k); }
+
 function tambah(idx){
-  const m=MENU[idx];
-  const ada=talam.find(t=>kunci(t)===kunci(m));
-  ada?ada.q++:talam.push({...m,q:1});
+  const m = MENU[idx];
+  const ada = cari(kunci(m));
+  if(ada) ada.q++; else talam.push({...m, q:1});
   lukisTalam();
-  toast((bahasa==='id'? (bahasa==='id'?m.id:m.en)+' ditambahkan' : m.en+' added'));
+  toast((bahasa==='id' ? m.id : m.en) + (bahasa==='id' ? ' ditambahkan' : ' added'));
 }
-function totalIDR(){ return talam.reduce((a,t)=>a+t.idr*t.q,0); }
-function totalUSD(){ return talam.reduce((a,t)=>a+t.usd*t.q,0); }
+
+function ubahQty(k, delta){
+  const t = cari(k);
+  if(!t) return;
+  t.q += delta;
+  if(t.q <= 0) return buang(k, true);
+  lukisTalam();
+}
+
+function buang(k, diam){
+  const t = cari(k);
+  if(!t) return;
+  talam = talam.filter(x => kunci(x) !== k);
+  lukisTalam();
+  if(!diam) toast((bahasa==='id' ? t.id : t.en) + (bahasa==='id' ? ' dihapus' : ' removed'));
+}
+
+function kosongkanTalam(){
+  if(!talam.length) return;
+  if(!confirm(bahasa==='id' ? 'Kosongkan seluruh keranjang?' : 'Empty the whole basket?')) return;
+  talam = [];
+  lukisTalam();
+  toast(bahasa==='id' ? 'Keranjang dikosongkan' : 'Basket emptied');
+}
+
+function totalIDR(){ return talam.reduce((a,t) => a + t.idr * t.q, 0); }
+function totalUSD(){ return talam.reduce((a,t) => a + t.usd * t.q, 0); }
+
 function ringkasan(){
-  return talam.map(t=>`${t.q} x ${bahasa==='id'?t.id:t.en} ${t.uk} (${rupiah(t.idr*t.q)})`).join(', ');
+  return talam.map(t => `${t.q} x ${bahasa==='id'?t.id:t.en} ${t.uk} (${rupiah(t.idr*t.q)})`).join(', ');
 }
+
+/* satu-satunya tempat yang menulis total, ringkasan, dan tampilan keranjang */
 function lukisTalam(){
-  const bar=document.getElementById('talam');
-  if(!talam.length){ bar.classList.remove('buka');
-    document.getElementById('jumlahTeks').textContent='IDR 0 · USD 0.00'; return; }
-  const bil=talam.reduce((a,t)=>a+t.q,0);
-  document.getElementById('talamTeks').textContent = bahasa==='id'
-    ? `${bil} toples di keranjang` : `${bil} jars in your basket`;
-  document.getElementById('talamHarga').textContent = ringkasan();
+  const bar   = document.getElementById('talam');
+  const bil   = talam.reduce((a,t) => a + t.q, 0);
+  const teks  = talam.length ? ringkasan() : '';
+  const L     = bahasa === 'id';
+
+  // formulir selalu mengikuti isi keranjang — tidak bisa lagi tidak sinkron
+  document.getElementById('pesanan').value = teks;
+  document.getElementById('jumlahTeks').textContent =
+    talam.length ? `${rupiah(totalIDR())} · USD ${totalUSD().toFixed(2)}` : 'IDR 0 · USD 0.00';
+  document.getElementById('notaPesanan').textContent = talam.length
+    ? (L ? 'Ubah jumlah atau hapus lewat keranjang di bawah layar.'
+         : 'Change quantities or remove items from the basket bar below.')
+    : (L ? 'Belum ada produk. Pilih dari menu di atas.'
+         : 'No products yet. Pick something from the menu above.');
+
+  // tanda jumlah di kartu menu
+  document.querySelectorAll('.kad').forEach(kad => {
+    const t = cari(kad.dataset.kunci);
+    kad.classList.toggle('dipilih', !!t);
+    const b = kad.querySelector('.jumkad');
+    if(b) b.textContent = t ? t.q : '';
+  });
+
+  if(!talam.length){
+    bar.classList.remove('buka', 'buka-rincian');
+    document.getElementById('togel').setAttribute('aria-expanded','false');
+    document.getElementById('rincian').innerHTML = '';
+    setem(0);
+    return;
+  }
+
+  document.getElementById('talamTeks').textContent = L
+    ? `${bil} toples · ${rupiah(totalIDR())}` : `${bil} jars · ${rupiah(totalIDR())}`;
+  document.getElementById('talamHarga').textContent = `USD ${totalUSD().toFixed(2)}`;
+
+  document.getElementById('rincian').innerHTML =
+    talam.map(t => {
+      const k = kunci(t);
+      const nama = L ? t.id : t.en;
+      return `<div class="item">
+        <img src="${t.img}" alt="">
+        <div class="nm"><b>${nama}</b><span>${t.uk} · ${rupiah(t.idr)}</span></div>
+        <div class="qty">
+          <button type="button" onclick="ubahQty('${k}',-1)" aria-label="${L?'Kurangi':'Decrease'}">−</button>
+          <b>${t.q}</b>
+          <button type="button" onclick="ubahQty('${k}',1)" aria-label="${L?'Tambah':'Increase'}">+</button>
+        </div>
+        <div class="sub">${rupiah(t.idr * t.q)}</div>
+        <button type="button" class="buang" onclick="buang('${k}')" aria-label="${L?'Hapus':'Remove'}">✕</button>
+      </div>`;
+    }).join('') +
+    `<button type="button" class="kosongkan" onclick="kosongkanTalam()">${L?'Kosongkan keranjang':'Empty basket'}</button>`;
+
   bar.classList.add('buka');
-  document.getElementById('pesanan').value = ringkasan();
-  document.getElementById('jumlahTeks').textContent = `${rupiah(totalIDR())} · USD ${totalUSD().toFixed(2)}`;
   setem(bil);
 }
+
+document.getElementById('togel').addEventListener('click', function(){
+  const bar = document.getElementById('talam');
+  const buka = bar.classList.toggle('buka-rincian');
+  this.setAttribute('aria-expanded', buka ? 'true' : 'false');
+});
 
 /* ====== KARTU POIN ====== */
 function setem(bil){
