@@ -20,6 +20,8 @@ header .kanan{margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap
 .btn-putih{background:#fff;color:var(--merah)}
 .btn-wa{background:#25D366;color:#08301a}
 .btn-kecil{padding:6px 12px;font-size:.78rem}
+.btn-hapus{background:#F4D6D6;color:var(--merah)}
+.btn-hapus:hover{background:var(--merah);color:#fff}
 .kartu{background:#fff;border:1px solid rgba(142,17,20,.15);border-radius:16px;padding:16px;margin-bottom:14px}
 .ringkas{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
 .stat{background:#fff;border:1px solid rgba(142,17,20,.15);border-radius:16px;padding:16px}
@@ -185,6 +187,29 @@ async function muat(){
   }
 }
 
+function petaHTML(d){
+  if(!d.koordinat && !d.peta) return '<span class="nota">Tanpa titik GPS</span>';
+  const k = d.koordinat || '';
+  const u = d.peta || ('https://maps.google.com/?q=' + encodeURIComponent(k));
+  return `<a class="btn btn-putih btn-kecil" target="_blank" rel="noopener" href="${u}">📍 Buka peta</a>
+          <div class="nota" style="margin-top:4px">${k}</div>`;
+}
+
+async function hapusPesanan(baris, nama){
+  if(!confirm('Hapus pesanan atas nama "' + (nama||'-') + '"?\n\nBaris dipindahkan ke sheet "Terhapus", jadi masih bisa dipulihkan.')) return;
+  try{
+    const j = await panggil({aksi:'hapus', baris:baris});
+    if(j && j.ok){
+      DATA = DATA.filter(x => x.baris !== baris);
+      // nomor baris di sheet bergeser naik setelah penghapusan
+      DATA.forEach(x => { if(x.baris > baris) x.baris--; });
+      lukis();
+    }else{
+      alert('Gagal menghapus: ' + ((j && j.error) || 'server menolak'));
+    }
+  }catch(e){ alert(e.message); }
+}
+
 async function ubahStatus(baris, nilai){
   try{
     const j = await panggil({aksi:'status', baris:baris, nilai:nilai});
@@ -255,10 +280,13 @@ function lukis(){
       <td>${tgl(d.waktu)}<div class="nota">${d.tarikh||''}</div></td>
       <td><b>${d.nama||'-'}</b><div class="nota">${d.fon||''}<br>${d.emel||''}</div></td>
       <td>${d.pesanan||'-'}${d.kartu?`<div class="nota">🎁 ${d.kartu}</div>`:''}${d.rujukan?`<div class="nota">Ref: ${d.rujukan}</div>`:''}</td>
-      <td>${d.kirim||'-'}<div class="nota">${d.alamat||''}</div></td>
+      <td>${d.kirim||'-'}<div class="nota">${d.alamat||''}</div><div style="margin-top:6px">${petaHTML(d)}</div></td>
       <td class="total">${rupiah(d.total_idr)}<div class="nota">USD ${d.total_usd||'0.00'}</div></td>
       <td>${pilihStatus(d)}</td>
-      <td><a class="btn btn-wa btn-kecil" target="_blank" rel="noopener" href="${waLink(d.fon,d.nama)}">Balas</a></td>
+      <td style="white-space:nowrap">
+        <a class="btn btn-wa btn-kecil" target="_blank" rel="noopener" href="${waLink(d.fon,d.nama)}">Balas</a>
+        <button class="btn btn-hapus btn-kecil" onclick="hapusPesanan(${d.baris}, ${JSON.stringify(d.nama||'')})">Hapus</button>
+      </td>
     </tr>`).join('')}</tbody></table>`;
 
   const kad = `<div id="kad">${rows.map(d=>`
@@ -271,6 +299,7 @@ function lukis(){
         <dt>Pesanan</dt><dd>${d.pesanan||'-'}</dd>
         <dt>Total</dt><dd class="total">${rupiah(d.total_idr)} · USD ${d.total_usd||'0.00'}</dd>
         <dt>Pengiriman</dt><dd>${d.kirim||'-'} — ${d.alamat||''}</dd>
+        <dt>Titik GPS</dt><dd>${petaHTML(d)}</dd>
         <dt>Tanggal dibutuhkan</dt><dd>${d.tarikh||'-'}</dd>
         ${d.kartu?`<dt>Kartu ucapan</dt><dd>${d.kartu}</dd>`:''}
         ${d.rujukan?`<dt>Kode referral</dt><dd>${d.rujukan}</dd>`:''}
@@ -279,6 +308,7 @@ function lukis(){
         <a class="btn btn-wa btn-kecil" target="_blank" rel="noopener" href="${waLink(d.fon,d.nama)}">💬 WhatsApp</a>
         <a class="btn btn-putih btn-kecil" href="tel:${d.fon||''}">📞 Telepon</a>
         <a class="btn btn-putih btn-kecil" href="mailto:${d.emel||''}">✉ Email</a>
+        <button class="btn btn-hapus btn-kecil" onclick="hapusPesanan(${d.baris}, ${JSON.stringify(d.nama||'')})">🗑 Hapus</button>
       </div>
     </div>`).join('')}</div>`;
 
